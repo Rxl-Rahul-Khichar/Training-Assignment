@@ -91,35 +91,27 @@ align-content: center;
 }
 
 .cardlogin{
-height: 400px;
+height: auto;
 position : absolute;
 left:65%;
-margin-top: 100px;
+margin-top: 40px;
 margin-bottom: auto;
 width: 300px;
 background-color: #190033 !important;
 border-radius:10px;
 }
 .cardforgot{
-height: 400px;
+height: auto;
 position : absolute;
-left:65%;
+float:center;
 margin-top: 100px;
 margin-bottom: auto;
-width: 300px;
+width: 500px;
 background-color: #190033 !important;
 border-radius:10px;
 }
-.cardforgot .card-header{
-height:100px;
-}
-.cardforgot .card-body{
-height:250px;
-}
-.cardforgot .card-footer{
-height:50px;
-bottom:10px;
-}
+
+
 .cancel{
   background-color: #FFC312;
   color: Black;
@@ -152,14 +144,15 @@ top:-10px;
 height: 550px;
 position: absolute;
 left:65%;
+top:60%;
 margin-top:30px;
 margin-bottom: auto;
-width: 350px;
+width: 300px;
 background-color: #190033 !important;
 border-radius:10px;
 }
 .cardrecent{
-height: 250px;
+height: auto;
 position: absolute;
 left:120px;
 margin-top:40px;
@@ -169,10 +162,10 @@ background-color: #190033 !important;
 border-radius:10px;
 }
 .cardtop{
-height: 250px;
-position: absolute;
-top:350px;
-left:120px;
+height: 420px;
+position: relative;
+top:500px;
+left:-220px;
 margin-top:10px;
 width: 600px;
 background-color: #190033 !important;
