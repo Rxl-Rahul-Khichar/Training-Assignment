@@ -35,7 +35,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul></ul><ul> </ul><ul></ul> <ul> </ul><ul></ul><ul> </ul><ul></ul><ul> </ul><ul></ul><ul> </ul> <ul></ul>
+        <ul></ul><ul> </ul><ul></ul> <ul> </ul><ul></ul><ul> </ul><ul></ul><ul> </ul><ul></ul><ul> </ul>
 
 
         <form class="form-inline my-2 my-lg-0">
@@ -181,9 +181,9 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.name}.jpg" height="25px" width="25px"/>
+                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
                     </i>
-                    ${session.name}
+                    ${session.user.userName}
                 </button>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -214,20 +214,20 @@
                 <table  style="width:100%">
                     <tr>
                         <td rowspan="4" colspan="3" width="10%">
-                            <asset:image src="/profile/${userdata.userName}.jpg" height="120px" width="115px" style="margin-right: 10px"/>
+                            <asset:image src="/profile/${session.user.userName}.jpg" height="120px" width="115px" style="margin-right: 10px"/>
                         </td>
-                        <td width=200px class="text" colspan="3">${userdata.firstName} ${userdata.lastName}</td>
+                        <td width=200px class="text" colspan="3">${session.user.firstName} ${session.user.lastName}</td>
                     </tr>
                     <tr>
-                        <td width=150px class="text-muted" colspan="3">@${userdata.userName}</td>
+                        <td width=150px class="text-muted" colspan="3">@${session.user.userName}</td>
                     </tr>
                     <tr>
                         <td width=150px class="txt">Subscriptions</td>
                         <td width="150px" class="txt">topic</td>
                     </tr>
                     <tr>
-                        <td width=150px class="txt"><a href="">50</a></td>
-                        <td width=150px class="txt"><a href="">50</a></td>
+                        <td width=150px class="txt"><a href="">${scount}</a></td>
+                        <td width=150px class="txt"><a href="">${tcount}</a></td>
                     </tr>
                 </table>
             </div>
@@ -238,12 +238,14 @@
                 <h8 syle="float:left">Profile</h8>
             </div>
             <div class="card-body">
+                <p class="txt" id="suc">${flash.success}</p>
+                <p class="txt" id="err">${flash.error}</p>
                 <g:form controller="user" action="updateProfile" enctype="multipart/form-data">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" name="firstName" class="form-control" value="${userdata.firstName}" required>
+                        <input type="text" name="firstName" class="form-control" value="${session.user.firstName}" required>
 
                     </div>
 
@@ -253,7 +255,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" name="lastName" class="form-control" value="${userdata.lastName}" placeholder="username" required>
+                        <input type="text" name="lastName" class="form-control" value="${session.user.lastName}" placeholder="username" required>
 
                     </div>
 
@@ -261,14 +263,14 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" name="userName" class="form-control" value="${userdata.userName}" placeholder="username" required>
+                        <input type="text" name="userName" maxlength="10" class="form-control" value="${session.user.userName}" placeholder="username" required>
 
                     </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-images"></i></span>
                         </div>
-                        <input type="file" class="form-control" id="image" placeholder="choose" accept="image/*" name="image"><br>
+                        <input type="file" class="form-control" value = "${session.user.photo}" placeholder="choose" accept="image/*" name="image1"><br>
 
                     </div>
 
@@ -285,100 +287,103 @@
         <div class="cardtop">
             <div class="card-header">
                 <h8 syle="float:left">Topics</h8>
-
-
             </div>
             <div class="card-body">
-                <table  style="width:100%">
-                    <tr>
-                        <td rowspan="4" colspan="3" width="10%">
-                            <image src="https://image.flaticon.com/icons/png/512/3135/3135715.png" height=120px width=115px; style="margin-right: 10px;"/>
-                        </td>
+                <g:each in="${userlist}" var="it">
+                    <table  style="width:100%">
+                        <tr>
+                            <td rowspan="4" colspan="3" width="10%">
+                                <asset:image src="${it.createdBy.photo}" height="120px" width="115px" style="margin-right: 10px"/>
+                            </td>
 
-                        <td width=200px class="txt" colspan="3"><a href="">Grails</a></td>
-                    </tr>
-                    <tr>
-                        <td width=150px class="text-muted">@rkhichar</td>
+                            <td width=200px class="txt" colspan="3"><a href="">${it.topicName}</a></td>
+                        </tr>
+                        <tr>
+                            <td width=100px class="text-muted">@${it.createdBy.userName}</td>
 
-                        <td width=300px class="txxt">Subscriptions</td>
-                        <td></td>
-                        <td width="150px" class="txxt">Post</td>
-                    </tr>
-                    <tr>
-                        <td width=150px class="txt"><a href="">Subscriptions</a></td>
+                            <td width=100px class="txxt">Subscriptions</td>
+                            <td></td>
+                            <td width="150px" class="txxt">Post</td>
+                        </tr>
 
-                        <td width=30px class="txxt"><a href="">50</a></td>
-                        <td></td>
-                        <td width=150px class="txxt"><a href="">50</a></td>
-                    </tr>
-                    <tr>
-                        <td ><g:form action="addTopic" class="topicForm">
-                            <select class="form-control" name="selection">
-                                <option>CASUAL</option>
-                                <option>SERIOUS</option>
-                                <option>VERY SERIOUS</option>
-                            </select>
-                        </g:form> </td>
-                        <td ><g:form action="addTopic" class="topicForm">
-                            <select class="form-control" name="selection">
-                                <option>PUBLIC</option>
-                                <option>PRIVATE</option>
-                            </select>
-                        </g:form> </td>
-                        <td>
+                            <tr>
+                                <td></td>
 
-                            <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
-                                <i class="fas fa-envelope">
-                                </i>
-                            </button>
-                            <div class="modal" id="topicinvite">
-                                <div class="cardbodyinvite">
-                                    <div class="card-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title" >Send Invitation</h4>
+                                <td width=100px class="txxt"><a href="">50</a></td>
+                                <td></td>
+                                <td width=150px class="txxt"><a href="">50</a></td>
+                            </tr>
+
+                            <tr>
+                                <td ><g:form  action="addTopics" class="topicForm">
+                                    <select class="form-control" name="selection">
+                                        <option>CASUAL</option>
+                                        <option>SERIOUS</option>
+                                        <option>VERY SERIOUS</option>
+                                    </select>
+                                </g:form> </td>
+                                <td ><g:form  action="addTopics" class="topicForm">
+                                    <select class="form-control" name="selection">
+                                        <option>PUBLIC</option>
+                                        <option>PRIVATE</option>
+                                    </select>
+                                </g:form> </td>
+                                <td>
+
+                                    <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                                        <i class="fas fa-envelope">
+                                        </i>
+                                    </button>
+                                    <div class="modal" id="topicinvite">
+                                        <div class="cardbodyinvite">
+                                            <div class="card-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title" >Send Invitation</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <g:form class="form-horizontal" controller="sendingLink" action="sendInvite" name="invitation">
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2 control-label">Email</div>
+                                                        <div class="col-sm-12">
+                                                            <input type="email" name="email" required placeholder="Enter email" class="form-control col-sm-12" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2 control-label">Topic</div>
+                                                        <div class="col-sm-12">
+                                                            <input type="text" name="topicName" required placeholder="Topic Name" class="form-control col-sm-12" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-offset-2 col-sm-12">
+                                                            <button type="submit" class="btn btn-default" style="float:right;">Send</button>
+                                                        </div>
+                                                    </div>
+                                                </g:form>
+
+
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <g:form class="form-horizontal" controller="user" action="registerUser" name="invitation">
-                                            <div class="form-group">
-                                                <div class="col-sm-2 control-label">Email</div>
-                                                <div class="col-sm-12">
-                                                    <input type="email" name="email" required placeholder="Enter email" class="form-control col-sm-12" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2 control-label">Topic</div>
-                                                <div class="col-sm-12">
-                                                    <input type="text" name="topicName" required placeholder="Topic Name" class="form-control col-sm-12" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-12">
-                                                    <button type="submit" class="btn btn-default" style="float:right;">Send</button>
-                                                </div>
-                                            </div>
-                                        </g:form>
 
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
-                                <i class="fas fa-edit">
-                                </i>
-                            </button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
-                                <i class="fas fa-trash">
-                                </i>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                                        <i class="fas fa-edit">
+                                        </i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </table>
+                            <hr>
+                </g:each>
             </div>
 
         </div>
@@ -391,6 +396,8 @@
 
     </div>
     <div class="card-body">
+        <p class="txt" id="success">${flash.success}</p>
+        <p class="txt" id="error">${flash.error}</p>
         <g:form controller="user" action="updatePassword">
             <div class="input-group form-group">
                 <div class="input-group-prepend">
@@ -404,6 +411,7 @@
                 </div>
                 <input type="password" class="form-control" name="newConfirmPassword" placeholder="confirm password" required>
             </div>
+            <p class="txt" id="msg">${flash.msg}</p>
             <div class="form-group">
                 <input type="submit" value="Update" class="btn float-right login_btn">
             </div>

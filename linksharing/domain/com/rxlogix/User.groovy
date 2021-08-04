@@ -7,7 +7,7 @@ class User {
     String confirmPassword
     String firstName
     String lastName
-    byte photo
+    String photo
     boolean admin
     Date dateCreated
     Date lastUpdated
@@ -19,6 +19,8 @@ class User {
         userName(unique: true, blank: false)
         firstName(blank: false,nullable: false)
         password(blank: false,nullable: false)
+        confirmPassword(blank: false,nullable: false)
+        photo(blank: true,nullable: true)
 
     }
     static mapping = {

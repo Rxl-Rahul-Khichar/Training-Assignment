@@ -1,13 +1,14 @@
 package com.rxlogix
-//import Enums.VisibilityEnum
+import Enums.VisibilityEnum
 class Topic {
-    String name
+    String topicName
     Date dateCreated
     Date lastUpdated
-    //VisibilityEnum visibility
+    User createdBy
+    VisibilityEnum visibility
     static belongsTo = [createdBy:User]
     static hasMany = [resources:Resource,subscribers:Subscription]
     static constraints = {
-        name blank: false
+        topicName blank: false
     }
 }

@@ -185,9 +185,9 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.name}.jpg" height="25px" width="25px"/>
+                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
                     </i>
-                    ${session.name}
+                    ${session.user.userName}
                 </button>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -238,13 +238,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <g:each var="User" in="${userList}">
+                <g:each var="user" in="${userList}">
                     <tr>
-                        <td class="txt">${User.id}</td>
-                        <td  class="txt">${User.userName}</td>
-                        <td  class="txt">${User.email}</td>
-                        <td  class="txt">${User.firstName}</td>
-                        <td  class="txt">${User.lastName}</td>
+                        <td class="txt">${user.id}</td>
+                        <td  class="txt">${user.userName}</td>
+                        <td  class="txt">${user.email}</td>
+                        <td  class="txt">${user.firstName}</td>
+                        <td  class="txt">${user.lastName}</td>
                         <td  class="txt">active</td>
                         <td>
                             <button class="btn btn-warning">

@@ -1,0 +1,147 @@
+package linksharing
+
+class User {
+    String email
+    String userName
+    String password
+    String firstName
+    String lastName
+    Byte photo
+    boolean admin
+    Date dateCreated
+    Date lastUpdated
+
+    static hasMany = [topics:Topic,subscriptions:Subscription,resources:Resource,readingItems:ReadingItem]
+//    resourceRating check
+
+    static constraints = {
+        email(unique: true, email: true)
+        userName(unique: true, blank: false)
+        firstName blank: false
+        password blank: false
+    }
+}
+
+
+
+
+package linksharing
+
+class Topic {
+    String name
+//    created by user
+    Date dateCreated
+    Date lastUpdated
+//    enum visibility
+
+    static belongsTo = [createdBy:User]
+    static hasMany = [resources:Resource]
+
+    static constraints = {
+        name blank: false
+    }
+}
+
+
+
+package linksharing
+
+class Subscription {
+//    topic
+//    user
+//    enum seriousness
+    Date dateCreated
+
+    static belongsTo = [topic:Topic,user:User]
+
+    static constraints = {
+    }
+}
+
+
+
+package linksharing
+
+class ResourceRating {
+//    resource
+//    user
+    static belongsTo = [resource:Resource,user:User]
+    int score
+
+    static constraints = {
+        score blank: false
+    }
+
+
+}
+
+
+
+
+package linksharing
+
+class Resource {
+    String description
+//    created by user
+//    topic
+    Date dateCreated
+    Date lastUpdated
+
+    static belongsTo = [createdBy:User,topic:Topic]
+
+    static constraints = {
+    }
+}
+
+
+
+package linksharing
+
+class ReadingItem {
+//    resource
+//    user
+    boolean isRead
+
+    static belongsTo = [resource:Resource,user:User]
+
+    static constraints = {
+        isRead blank: false
+    }
+}
+
+
+
+package linksharing
+
+class LinkResource {
+    String url
+
+    static belongsTo = [resource: Resource]
+
+    static constraints = {
+        url blank: false
+    }
+
+    static mapping = {
+        table 'LinkRes'
+    }
+}
+
+
+
+package linksharing
+
+class DocumentResource {
+    String filePath
+
+    static belongsTo = [resource: Resource]
+
+    static constraints = {
+        filePath blank: false
+    }
+
+    static mapping = {
+        table 'DocRes'
+    }
+}
+

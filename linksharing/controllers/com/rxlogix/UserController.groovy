@@ -4,11 +4,14 @@ class UserController {
     def loginService
     def signupService
     def userListService
+    def topicService
+    def updateService
+    def resourceService
     def index() {
+        List rsc = resourceService.recentResourceMethod()
         render(view: "index")
     }
     def action2(){
-        render(view: "loginUser")
     }
     def registerUser() {
         if (User.findByEmail(params.email)) {
@@ -27,13 +30,7 @@ class UserController {
             } else {
                 flash.error="registration failed"
             }
-            /*try{
-                u1.save(flush:true,failOnError:true)
-                flash.success = "user successfully registered"
-            } catch(Exception e){
-                flash.error = "user registration failed"
-            }
-            redirect(actionName:"index")*/
+
         }
         else{
             flash.message4="password did not match"
@@ -44,7 +41,8 @@ class UserController {
         User x = loginService.loginMethod(params,request)
        if(x!= null){
             if(x.password==params.password){
-                session.name=x.userName
+                session.setAttribute('user',x)
+
                 redirect(controller: 'dashboard', action: 'dashboard')
             }
             else{
@@ -71,13 +69,40 @@ class UserController {
             render(view: "userList", model: [userList: list])
     }
     def userProfile(){
-        User u2 = User.findByUserName(session.name)
-        render(view: "userProfile",model:[userdata:u2])
+        Integer t_count = topicService.userTopicCountMethod(session.user.userName)
+        Integer s_count = topicService.userSubCountMethod(session.user.userName)
+        List userList = topicService.userTopicList(session.user.userName)
+        render(view: "userProfile",model:[scount:s_count,tcount:t_count,userlist:userList])
     }
     def updateProfile(){
-
+        String name = session.user.userName
+        def u1 = updateService.updateProfile(params, request, name)
+        if(u1){
+            flash.success = "profile updated successfully"
+            session.setAttribute("user",u1)
+            redirect(controller: "user", action: "userProfile")
+        }
+        else{
+            flash.error = "Error try again"
+            return
+        }
     }
     def updatePassword(){
-
+        String name = session.user.userName
+        if(params.newPassword==params.newConfirmPassword){
+            def u = updateService.updatePassword(params,name)
+            if(u){
+                flash.success = "password updated successfully"
+                redirect(controller: "user", action:"userProfile")
+            }
+            else{
+                flash.error = "Error Try again"
+                redirect(controller: "user", action:"userProfile")
+            }
+        }
+        else{
+            flash.msg = "password not match"
+            redirect(controller: "user", action:"userProfile")
+        }
     }
 }

@@ -1,10 +1,10 @@
 package Enums
 enum SeriousnessEnum {
-    casual(0),
-    serious(1),
-    verySerious(2),
+    CASUAL(0),
+    SERIOUS(1),
+    VERY_SERIOUS(2),
 
-    final int val
+    private final int val
     SeriousnessEnum(int val){
         this.val = val
     }

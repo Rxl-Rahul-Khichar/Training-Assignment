@@ -1,11 +1,10 @@
 package com.rxlogix
-//import Enums.SeriousnessEnum
+import Enums.SeriousnessEnum
 class Subscription {
 //topic
-    //user
-    //enm seriousness
     Date dateCreated
-    //SeriousnessEnum seriousness
+    Date lastUpdated
+    SeriousnessEnum seriousness
     static belongsTo = [user:User,topic:Topic]
     static constraints = {
     }
