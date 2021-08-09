@@ -27,7 +27,7 @@
 </head>
 <body>
 <nav class="topnav">
-    <a class="active" href="#home">Link Sharing</a>
+    <a class="active" href="/user/index/">Link Sharing</a>
     <div class = "login-container">
     </div>
 </nav>
@@ -42,28 +42,26 @@
             </div>
             <div class="card-body">
                 <h8 > Type your Registered Email to find your account </h8>
-                <g:form >
+                <g:form controller="sendLink" action="resetPassword">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                         </div>
                         <input type="text" class="form-control"  name="email" required placeholder="Email">
-
                     </div>
-
+                    <p class="txt" id="ts">${flash.success}</p>
+                    <p class="txt" id="th">${flash.error}</p>
                     <div class="form-group">
-
-
                         <input type="submit" value="Get Link" class="btn float-right login_btn">
                     </div>
 
                 </g:form>
-                <a class="cancel" href="index.html">Cancel</a>
+                <a class="cancel" href="/user/index/">Cancel</a>
             </div>
             <div class="card-footer">
 
                 <div class="d-flex justify-content-center links">
-                    Don't have account?<a href="index.html">Sign Up</a>
+                    Don't have account?<a href="/user/index">Sign Up</a>
                 </div>
             </div>
         </div>

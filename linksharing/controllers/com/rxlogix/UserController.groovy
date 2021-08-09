@@ -4,11 +4,16 @@ class UserController {
     def loginService
     def signupService
     def userListService
+    def topicService
+    def updateService
+    def resourceService
     def index() {
-        render(view: "index")
+        Date date =new Date()
+        List rsc = resourceService.recentResourceMethod()
+        List top = resourceService.postList()
+        render(view: "index",model: [resource:rsc,date:date,top:top])
     }
     def action2(){
-        render(view: "loginUser")
     }
     def registerUser() {
         if (User.findByEmail(params.email)) {
@@ -21,19 +26,12 @@ class UserController {
         else if(params.password==params.confirmPassword){
             User x = signupService.signupMethod(params, request)
             if (x) {
-
                 flash.success="registration successful, login"
                 redirect(controller: 'user', action: 'index')
             } else {
                 flash.error="registration failed"
             }
-            /*try{
-                u1.save(flush:true,failOnError:true)
-                flash.success = "user successfully registered"
-            } catch(Exception e){
-                flash.error = "user registration failed"
-            }
-            redirect(actionName:"index")*/
+
         }
         else{
             flash.message4="password did not match"
@@ -44,7 +42,8 @@ class UserController {
         User x = loginService.loginMethod(params,request)
        if(x!= null){
             if(x.password==params.password){
-                session.name=x.userName
+                session.setAttribute('user',x)
+
                 redirect(controller: 'dashboard', action: 'dashboard')
             }
             else{
@@ -71,13 +70,100 @@ class UserController {
             render(view: "userList", model: [userList: list])
     }
     def userProfile(){
-        User u2 = User.findByUserName(session.name)
-        render(view: "userProfile",model:[userdata:u2])
+        Integer t_count = topicService.userTopicCountMethod(session.user.userName)
+        Integer s_count = topicService.userSubCountMethod(session.user.userName)
+        List userList = topicService.userTopicList(session.user.userName)
+        render(view: "userProfile",model:[scount:s_count,tcount:t_count,userlist:userList])
     }
     def updateProfile(){
-
+        String name = session.user.userName
+        def u1 = updateService.updateProfile(params, request, name)
+        if(u1){
+            flash.success = "profile updated successfully"
+            session.setAttribute("user",u1)
+            redirect(controller: "user", action: "userProfile")
+        }
+        else{
+            flash.error = "Error try again"
+            return
+        }
     }
     def updatePassword(){
+        String name = session.user.userName
+        if(params.newPassword==params.newConfirmPassword){
+            def u = updateService.updatePassword(params,name)
+            if(u){
+                flash.success = "password updated successfully"
+                redirect(controller: "user", action:"userProfile")
+            }
+            else{
+                flash.error = "Error Try again"
+                redirect(controller: "user", action:"userProfile")
+            }
+        }
+        else{
+            flash.msg = "password not match"
+            redirect(controller: "user", action:"userProfile")
+        }
+    }
+    def resetPassword(){
+        String name = params.name
+        if(params.newPassword==params.newConfirmPassword){
+            def u = updateService.updatePassword(params,name)
+            if(u){
+                flash.message1 = "password updated successfully"
+                redirect(url: "/")
+            }
+            else{
+                flash.error = "Error Try again"
+                redirect(url: "/")
+            }
+        }
+        else{
+            flash.message = "password not match"
+            redirect(url: "/")
+        }
 
+
+    }
+    def ResetPasswordEmail() {
+        String value = params.token
+        def token =Token.findByValue(value)
+        if(token) {
+            render(controller: "user", view: 'resetNewPass', model: [name: params.name])
+        }
+        else{
+            redirect(url: "/")
+        }
+
+    }
+    def activateUser(){
+        User user =User.findByUserName(params.name)
+        if(user.isActive()){
+            flash.message = "user is already active"
+        }
+        else {
+            user.active=true
+            user.save(failOnError: true, flush: true)
+        }
+        redirect(controller: "user",action: "showUserList")
+    }
+    def deActivateUser(){
+        User user =User.findByUserName(params.name)
+        if(user.isActive()){
+            user.active=false
+            user.save(failOnError: true, flush: true)
+        }
+        else {
+            flash.message = "user is already not active"
+        }
+        redirect(controller: "user",action: "showUserList")
+    }
+    def makeAdmin(){
+        User user =User.findByUserName(params.name)
+            user.admin=true
+            user.save(failOnError: true, flush: true)
+
+        redirect(controller: "user",action: "showUserList")
     }
 }

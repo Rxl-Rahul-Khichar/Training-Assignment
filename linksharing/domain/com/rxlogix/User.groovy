@@ -7,8 +7,9 @@ class User {
     String confirmPassword
     String firstName
     String lastName
-    byte photo
+    String photo
     boolean admin
+    boolean active
     Date dateCreated
     Date lastUpdated
     static transients = ['name']
@@ -19,6 +20,8 @@ class User {
         userName(unique: true, blank: false)
         firstName(blank: false,nullable: false)
         password(blank: false,nullable: false)
+        confirmPassword(blank: false,nullable: false)
+        photo(blank: true,nullable: true)
 
     }
     static mapping = {
