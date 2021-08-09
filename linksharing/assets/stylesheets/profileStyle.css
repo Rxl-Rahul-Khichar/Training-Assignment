@@ -146,12 +146,12 @@ html,body{
 }
 
 .cardlogin{
-    height: 380px;
+    height: auto;
     position : absolute;
     left:50%;
     margin-top: 40px;
     margin-bottom: auto;
-    width: 550px;
+    width: 600px;
     background-color: #190033 !important;
     border-radius:5px;
 }
@@ -188,8 +188,8 @@ html,body{
     background-color: #190033 !important;
     border-radius:10px;
 }
-.cardlogin .card-header{
-    height:40px;
+.cardforgot .card-header{
+    height:100px;
 }
 .cardforgot .card-body{
     height:250px;
@@ -198,7 +198,7 @@ html,body{
     height:50px;
     bottom:10px;
 }
-.cardtrend .card-header{
+.cardtopic .card-header{
     height:40px;
 }
 .cancel{
@@ -230,10 +230,10 @@ html,body{
     top:-10px;
 }
 .cardtrend{
-    height: auto;
+    height: 500px;
     position: absolute;
-    left:50%;
-    top:75%;
+    left:45px;
+    top:900px;
     margin-top:30px;
     margin-bottom: auto;
     width: 550px;
@@ -251,13 +251,13 @@ html,body{
     border-radius:5px;
 }
 .cardtop{
-    height: auto;
+    height: 500px;
     position: relative;
     top:220px;
     left:-320px;
     margin-top:10px;
-    margin-bottom: auto;
     width: 550px;
+    margin-bottom: auto;
     background-color: #190033 !important;
     border-radius:5px;
 }
@@ -299,8 +299,7 @@ html,body{
 }
 .social_icon{
     position: relative;
-    right: 5px;
-    bottom:10px;
+    left:-230px;
 
 }
 .text{
@@ -334,7 +333,12 @@ html,body{
     background-color: white;
     color:black;
 }
-
+.cardtop{
+    overflow: auto
+}
+.cardtrend{
+    overflow: auto
+}
 .input-group-prepend span{
     width: 50px;
     background-color: #FFC312;
@@ -343,7 +347,6 @@ html,body{
 }
 
 input:focus{
-    outline: 0 0 0 0  !important;
     box-shadow: 0 0 0 0 !important;
 
 }
@@ -365,7 +368,9 @@ input:focus{
     width: 90px;
 
 }
-
+img {
+    border:2px solid #e2e2e2;
+}
 .login_btn:hover{
     color: black;
     background-color: white;

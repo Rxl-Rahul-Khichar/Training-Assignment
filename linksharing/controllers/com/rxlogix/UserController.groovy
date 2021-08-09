@@ -8,8 +8,10 @@ class UserController {
     def updateService
     def resourceService
     def index() {
+        Date date =new Date()
         List rsc = resourceService.recentResourceMethod()
-        render(view: "index")
+        List top = resourceService.postList()
+        render(view: "index",model: [resource:rsc,date:date,top:top])
     }
     def action2(){
     }
@@ -24,7 +26,6 @@ class UserController {
         else if(params.password==params.confirmPassword){
             User x = signupService.signupMethod(params, request)
             if (x) {
-
                 flash.success="registration successful, login"
                 redirect(controller: 'user', action: 'index')
             } else {
@@ -104,5 +105,65 @@ class UserController {
             flash.msg = "password not match"
             redirect(controller: "user", action:"userProfile")
         }
+    }
+    def resetPassword(){
+        String name = params.name
+        if(params.newPassword==params.newConfirmPassword){
+            def u = updateService.updatePassword(params,name)
+            if(u){
+                flash.message1 = "password updated successfully"
+                redirect(url: "/")
+            }
+            else{
+                flash.error = "Error Try again"
+                redirect(url: "/")
+            }
+        }
+        else{
+            flash.message = "password not match"
+            redirect(url: "/")
+        }
+
+
+    }
+    def ResetPasswordEmail() {
+        String value = params.token
+        def token =Token.findByValue(value)
+        if(token) {
+            render(controller: "user", view: 'resetNewPass', model: [name: params.name])
+        }
+        else{
+            redirect(url: "/")
+        }
+
+    }
+    def activateUser(){
+        User user =User.findByUserName(params.name)
+        if(user.isActive()){
+            flash.message = "user is already active"
+        }
+        else {
+            user.active=true
+            user.save(failOnError: true, flush: true)
+        }
+        redirect(controller: "user",action: "showUserList")
+    }
+    def deActivateUser(){
+        User user =User.findByUserName(params.name)
+        if(user.isActive()){
+            user.active=false
+            user.save(failOnError: true, flush: true)
+        }
+        else {
+            flash.message = "user is already not active"
+        }
+        redirect(controller: "user",action: "showUserList")
+    }
+    def makeAdmin(){
+        User user =User.findByUserName(params.name)
+            user.admin=true
+            user.save(failOnError: true, flush: true)
+
+        redirect(controller: "user",action: "showUserList")
     }
 }

@@ -96,7 +96,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Topic</div>
                                     <div class="col-sm-12">
-                                        <g:select name="topicName" from="${subscription.topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
+                                        <g:select name="topicName" from="${topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -134,7 +134,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Topic</div>
                                     <div class="col-sm-12">
-                                        <g:select name="topicName" from="${subscription.topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
+                                        <g:select name="topicName" from="${topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                     </div>
                                 </div>
                                 <input type="submit" value="share"   class="btn btn-default" style="float: right;"/>
@@ -166,7 +166,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Topic</div>
                                     <div class="col-sm-12">
-                                        <g:select name="topicName" from="${subscription.topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
+                                        <g:select name="topicName" from="${topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                     </div>
                                 </div>
                                 <input type="submit" value="share"   class="btn btn-default" style="float: right; margin-top:-5px;"/>
@@ -182,7 +182,7 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
+                        <asset:image src="${session.user.photo}" height="25px" width="25px"/>
                     </i>
                     ${session.user.userName}
                 </button>
@@ -234,11 +234,16 @@
                         <td width="150px" class="txxt">Post</td>
                     </tr>
                     <tr>
-                        <g:if test="${topic.subscribers.user.userName.contains(session.user.userName)}">
-                            <td><g:link controller="Subscription" action="unSubTrend" params="[id:topic.id, page:'topic']">Unsubscribe</g:link></td>
+                        <g:if test="${topic.createdBy.userName.equals(session.user.userName)}">
+                            <td></td>
                         </g:if>
                         <g:else>
-                            <td><g:link controller="Subscription" action="subscribe" params="[id:topic.id,page: 'topic']">Subscribe</g:link></td>
+                            <g:if test="${topic.subscribers.user.userName.contains(session.user.userName)}">
+                                <td><g:link controller="Subscription" action="unSubTrend" params="[id:topic.id, page:'topic']">Unsubscribe</g:link></td>
+                            </g:if>
+                            <g:else>
+                                <td><g:link controller="Subscription" action="subscribe" params="[id:topic.id,page: 'topic']">Subscribe</g:link></td>
+                            </g:else>
                         </g:else>
 
                         <td width=30px class="txxt"><a href="">${subscount}</a></td>
@@ -335,17 +340,15 @@
                             </td>
                             <td class ="gl">
                                 <g:if test="${it.hasProperty("filePath")}">
-                                    <g:link controller="resources" action="downloadFile" params="[id:it.id , tid:it.id , flag:1]">Download</g:link>
+                                    <g:link controller="resources" action="downloadFile" params="[id:it.id ,flag:1]">Download</g:link>
                                 </g:if>
                                 <g:else>
                                     <a href="${it.url}" target="_blank">Open Link</a>
                                 </g:else>
                             </td>
-                            <td class = "mrk">
-                                <g:link>Mark read</g:link>
+                            <td></td>
+                            <td><g:link controller="resources" action="viewPost" params="[id:it.id]">View Post</g:link>
                             </td>
-
-                            <td  class = "view"><a href="">view post</a></td>
                         </tr>
                     </table>
                     <hr>
@@ -366,10 +369,10 @@
                                 <td rowspan="4" colspan="3" width="10%">
                                     <asset:image src="${it.user.photo}" height="120px" width= "115px" style="margin-right: 10px"/>
                                 </td>
-                                <td width=200px class="text" colspan="3">Rahul Khichar</td>
+                                <td width=200px class="text" colspan="3">${it.user.firstName} ${it.user.lastName}</td>
                             </tr>
                             <tr>
-                                <td width=150px class="text-muted" colspan="3">@rkhichar</td>
+                                <td width=150px class="text-muted" colspan="3">@${it.user.userName}</td>
                             </tr>
                             <tr>
                                 <td width=150px class="txt">Subscriptions</td>

@@ -16,11 +16,10 @@ class SubscriptionService {
         }
         return subList
     }
-    def topicSubscriptions(tid) {
-        List<Subscription> subList = Subscription.createCriteria().list {
-            eq("topic.id", tid)
-        }
-        return subList
+    def userSubList(name){
+        List list  =User.findByUserName(name).subscriptions.asList()
+        return list
     }
+
 
 }

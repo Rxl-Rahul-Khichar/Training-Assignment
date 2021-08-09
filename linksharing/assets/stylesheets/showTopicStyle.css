@@ -241,6 +241,9 @@ html,body{
     background-color: #190033 !important;
     border-radius:5px;
 }
+img {
+    border:2px solid #e2e2e2;
+}
 .cardtop{
     height: auto;
     position: relative;

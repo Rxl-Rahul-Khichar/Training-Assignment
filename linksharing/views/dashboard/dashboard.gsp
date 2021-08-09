@@ -100,7 +100,7 @@
                             <h4 class="modal-title" >Send Invitation</h4>
                         </div>
                         <div class="card-body">
-                            <g:form class="form-horizontal" controller="sendingLink" action="sendInvite" name="invitation">
+                            <g:form class="form-horizontal" controller="sendLink" action="sendInvite" name="invitation">
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Email</div>
                                     <div class="col-sm-12">
@@ -110,7 +110,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Topic</div>
                                     <div class="col-sm-12">
-                                        <g:select name="topicName" from="" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
+                                        <g:select name="topicName" from="${subscription.topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -194,11 +194,11 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
+                        <asset:image src="${session.user.photo}" height="25px" width="25px"/>
                     </i>
                     ${session.user.userName}
                 </button>
-
+                <g:if test="${session.user.admin}">
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="/user/userProfile">profile</a>
                     <a class="dropdown-item" href="/user/showUserList">Users</a>
@@ -206,21 +206,23 @@
                     <a class="dropdown-item" href="">posts</a>
                     <a class="dropdown-item" href="/user/logout">Logout</a>
                 </div>
-
-                <!--
+                </g:if>
+                <g:else>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="">profile</a>
-                  <a class="dropdown-item" href="">Users</a>
+                  <a class="dropdown-item" href="/user/userProfile">profile</a>
+                  %{--<a class="dropdown-item" href="">Users</a>
                   <a class="dropdown-item" href="">topic</a>
-                  <a class="dropdown-item" href="">posts</a>
-                  <a class="dropdown-item" href="">Logout</a>
+                  <a class="dropdown-item" href="">posts</a>--}%
+                  <a class="dropdown-item" href="/user/logout">Logout</a>
                 </div>
-            </>-->
+            </g:else>
             </li>
         </ul>
     </div>
 </nav>
 <p class="tt" id="tt">${flash.messagetopic}</p>
+<p class="tt" id="ta">${flash.message}</p>
+<p class="tt" id="tb">${flash.message1}</p>
 <p class="tt" id="ts">${flash.success}</p>
 <p class="tt" id="th">${flash.error}</p>
 <div class="container"  >
@@ -232,9 +234,9 @@
                 <table  style="width:100%">
                     <tr>
                         <td rowspan="4" colspan="3" width="10%">
-                            <a href="/user/userProfile">
-                            <asset:image src="/profile/${session.user.userName}.jpg" height="120px" width= "115px" style="margin-right: 10px"/>
-                            </a>
+                            <g:link controller="dashboard" action="viewUserProfile" params="[id:session.user.id]">
+                            <asset:image src="${session.user.photo}" height="120px" width= "115px" style="margin-right: 10px"/>
+                            </g:link>
                         </td>
                         <td width=200px class="text" colspan="3">${session.user.firstName} ${session.user.lastName}</td>
                     </tr>
@@ -246,8 +248,8 @@
                         <td width="150px" class="txt">topic</td>
                     </tr>
                     <tr>
-                        <td width=150px class="txt"><a href="">${scount}</a></td>
-                        <td width=150px class="txt"><a href="">${tcount}</a></td>
+                        <td width=150px class="txt"> <g:link controller="dashboard" action="viewUserProfile" params="[id:session.user.id]">${scount}</g:link></td>
+                        <td width=150px class="txt"><g:link controller="dashboard" action="viewUserProfile" params="[id:session.user.id]">${tcount}</g:link></td>
                     </tr>
                 </table>
             </div>
@@ -259,47 +261,53 @@
                 <h8 syle="float:left">Inbox</h8>
             </div>
             <div class="card-body">
-                <g:each in="${rsclist}" var="it" >
-                <table>
-                    <tr>
-                    <td rowspan="3"  width=23%>
-                        <asset:image src="${it.createdBy.photo}" height="120px" width="115px"/>
-                    </td>
-                    <td width=140px class="text">${it.createdBy.firstName}</td>
-                    <td width=120px class ="usr">@${it.createdBy.userName}</td>
-                    <td width= 120px></td>
-                    <td width=120px>
-                        <g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">${it.topic.topicName}</g:link>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td colspan="10" height=50px class="para">
-                            ${it.description}
-                        </td>
-                    </tr>
-                    <tr>
-                    <td  class="d-flex justify-content-end social_icon">
-                        <span><i class="fab fa-facebook-square"></i></span>
-                        <span><i class="fab fa-google-plus-square"></i></span>
-                        <span><i class="fab fa-twitter-square"></i></span>
+                <g:each in="${unread}" var="it" >
+                    <g:if test="${it.resource.createdBy.userName.equals(session.user.userName)}">
+                    </g:if>
+                    <g:else>
+                        <table>
+                            <tr>
+                                <td rowspan="3"  width=23%>
+                                    <g:link controller="dashboard" action="viewUserProfile" params="[id:it.resource.createdBy.id]">
+                                    <asset:image src="${it.resource.createdBy.photo}" height="120px" width="115px"/>
+                                    </g:link>
+                                </td>
+                                <td width=140px class="text">${it.resource.createdBy.firstName}</td>
+                                <td width=120px class ="usr">@${it.resource.createdBy.userName}</td>
+                                <td width= 120px></td>
+                                <td width=120px>
+                                    <g:link controller="topic" action="viewTopic" params="[id:it.resource.topic.id]">${it.resource.topic.topicName}</g:link>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="10" height=50px class="para">
+                                    ${it.resource.description}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="d-flex justify-content-end social_icon">
+                                    <span><i class="fab fa-facebook-square"></i></span>
+                                    <span><i class="fab fa-google-plus-square"></i></span>
+                                    <span><i class="fab fa-twitter-square"></i></span>
 
-                    </td>
-                        <td class ="gl">
-                            <g:if test="${it.hasProperty("filePath")}">
-                                <g:link controller="resources" action="downloadFile" params="[id:it.id , tid:it.id , flag:1]">Download</g:link>
-                            </g:if>
-                            <g:else>
-                                <a href="${it.url}" target="_blank">Open Link</a>
-                            </g:else>
-                        </td>
-                        <td class = "mrk">
-                            <g:link>Mark read</g:link>
-                        </td>
-
-                    <td  class = "view"><a href="">view post</a></td>
-                    </tr>
-                </table>
-                <hr>
+                                </td>
+                                <td class ="gl">
+                                    <g:if test="${it.resource.hasProperty("filePath")}">
+                                        <g:link controller="resources" action="downloadFile" params="[id:it.resource.id , tid:it.resource.id , flag:1]">Download</g:link>
+                                    </g:if>
+                                    <g:else>
+                                        <a href="${it.resource.url}" target="_blank">Open Link</a>
+                                    </g:else>
+                                </td>
+                                <td class = "mrk">
+                                    <g:link controller="resources" action="markRead" params="[rid:it.resource.id]">Mark read</g:link>
+                                </td>
+                                <td><g:link controller="resources" action="viewPost" params="[id:it.resource.id]">View Post</g:link>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr>
+                    </g:else>
                 </g:each>
             </div>
 
@@ -317,10 +325,12 @@
                 <table  style="width:100%">
                     <tr>
                         <td rowspan="4" colspan="3" width="10%">
+                            <g:link controller="dashboard" action="viewUserProfile" params="[id:it.topic.createdBy.id]">
                             <asset:image src="${it.topic.createdBy.photo}" height="120px" width="115px" style="margin-right: 10px"/>
+                            </g:link>
                         </td>
-                       <td>
-                        <g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">${it.topic.topicName}</g:link>
+                       <td colspan="10">
+                        <g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">Topic: "${it.topic.topicName}" (${it.topic.visibility})</g:link>
                         </td>
                     </tr>
                     <tr>
@@ -333,35 +343,35 @@
                     <g:if test="${it.topic.createdBy.userName.equals(session.user.userName)}">
                     <tr>
                         <td></td>
-                        <td  class="txxt"><a href="">${it.topic.subscribers.size()}</a></td>
+                        <td  class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">${it.topic.subscribers.size()}</g:link></td>
                         <td></td>
-                        <td width=150px class="txxt"><a href="">${it.topic.resources.size()}</a></td>
+                        <td width=150px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">${it.topic.resources.size()}</g:link></td>
                     </tr>
                         <tr>
-                        <td ><g:form  action="addTopics" class="topicForm">
+                        <td ><g:form  controller="subscription" action="changeSeriousness">
                             <g:field type="hidden" name="id" value="${it.id}"></g:field>
                             <g:select  onChange="submit()" class="form-control" name="seriousness" from="${['SERIOUS','CASUAL','VERY_SERIOUS']}"
                                        value="${it.seriousness}" />
                         </g:form> </td>
-                        <td ><g:form  action="addTopics" class="topicForm">
-                            <g:field type="hidden" name="id1" value="${it.topicId}"></g:field>
+                        <td ><g:form controller="subscription" action="changeVisibility">
+                            <g:field type="hidden" name="id1" value="${it.topic.id}"></g:field>
                             <g:select onChange="submit()" class ="form-control" name="visibility" from="${['PUBLIC','PRIVATE']}"
                                       value="${it.topic.visibility}" />
                         </g:form> </td>
                         <td>
 
-                            <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                            <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#subinvite">
                                 <i class="fas fa-envelope">
                                 </i>
                             </button>
-                            <div class="modal" >
+                            <div class="modal" id="subinvite">
                                 <div class="cardbodyinvite">
                                     <div class="card-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         <h4 class="modal-title" >Send Invitation</h4>
                                     </div>
                                     <div class="card-body">
-                                        <g:form class="form-horizontal" controller="sendingLink" action="sendInvite" name="invitation">
+                                        <g:form class="form-horizontal" controller="sendLink" action="sendInvite" name="invitation">
                                             <div class="form-group">
                                                 <div class="col-sm-2 control-label">Email</div>
                                                 <div class="col-sm-12">
@@ -371,7 +381,7 @@
                                             <div class="form-group">
                                                 <div class="col-sm-2 control-label">Topic</div>
                                                 <div class="col-sm-12">
-                                                    <input type="text" name="topicName" required placeholder="Topic Name" class="form-control col-sm-12" />
+                                                    <g:select name="topicName" from="${subscription.topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -408,13 +418,13 @@
                                     <g:link controller="Subscription" action="unSubscribe" params="[id:it.id,page:'dashboard']">Unsubscribe</g:link>
                             </td>
 
-                            <td width=100px class="txxt"><a href="">${it.topic.subscribers.size()}</a></td>
+                            <td width=100px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">${it.topic.subscribers.size()}</g:link></td>
                             <td></td>
-                            <td width=150px class="txxt"><a href="">${it.topic.resources.size()}</a></td>
+                            <td width=150px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.topic.id]">${it.topic.resources.size()}</g:link></td>
                         </tr>
                         <tr>
                             <td >
-                                <g:form  action="addTopics" class="topicForm">
+                                <g:form controller="subscription" action="changeSeriousness" >
                                     <g:field type="hidden" name="id" value="${it.id}"></g:field>
                                     <g:select  onChange="submit()" class="form-control" name="seriousness" from="${['SERIOUS','CASUAL','VERY_SERIOUS']}"
                                                value="${it.seriousness}" />
@@ -423,18 +433,18 @@
 
                             <td>
 
-                                <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                                <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#subinvite">
                                     <i class="fas fa-envelope">
                                     </i>
                                 </button>
-                                <div class="modal" id="topicinvt">
+                                <div class="modal" id="subinvite">
                                     <div class="cardbodyinvite">
                                         <div class="card-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <h4 class="modal-title" >Send Invitation</h4>
                                         </div>
                                         <div class="card-body">
-                                            <g:form class="form-horizontal" controller="sendingLink" action="sendInvite" name="invitation">
+                                            <g:form class="form-horizontal" controller="sendLink" action="sendInvite" name="invitation">
                                                 <div class="form-group">
                                                     <div class="col-sm-2 control-label">Email</div>
                                                     <div class="col-sm-12">
@@ -444,7 +454,7 @@
                                                 <div class="form-group">
                                                     <div class="col-sm-2 control-label">Topic</div>
                                                     <div class="col-sm-12">
-                                                        <input type="text" name="topicName" required placeholder="Topic Name" class="form-control col-sm-12" />
+                                                        <g:select name="topicName" from="${subscription.topic.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -463,9 +473,6 @@
                             </td>
                         </tr>
                     </g:else>
-
-
-
                 </table>
                     <hr>
                     </g:each>
@@ -488,10 +495,12 @@
         <table  style="width:100%">
             <tr>
                 <td rowspan="4" colspan="3" width="10%">
+                    <g:link controller="dashboard" action="viewUserProfile" params="[id:it.createdBy.id]">
                     <asset:image src="${it.createdBy.photo}" height="120px" width="115px" style="margin-right: 10px"/>
+                    </g:link>
                 </td>
-                <td>
-                    <g:link controller="topic" action="viewTopic" params="[id:it.id]">${it.topicName}</g:link>
+                <td colspan="10">
+                    <g:link controller="topic" action="viewTopic" params="[id:it.id]">Topic: "${it.topicName}"</g:link>
                 </td>
             </tr>
             <tr>
@@ -505,34 +514,36 @@
             <tr>
                 <td></td>
 
-                <td width=100px class="txxt"><a href="">${it.subscribers.size()}</a></td>
+                <td width=100px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.id]">${it.subscribers.size()}</g:link></td>
                 <td></td>
-                <td width=150px class="txxt"><a href="">${it.resources.size()}</a></td>
+                <td width=150px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.id]">${it.resources.size()}</g:link></td>
             </tr>
 
             <tr>
-                <td ><g:form  action="addTopics" class="topicForm">
+                <td ><g:form controller="subscription" action="changeSeriousness" class="topicForm">
+                    <g:field type="hidden" name="id" value="${it.id}"></g:field>
                     <g:select  onChange="submit()" class="form-control" name="seriousness" from="${['SERIOUS','CASUAL','VERY_SERIOUS']}"
                                value="${seriousness}" />
                 </g:form> </td>
-                <td ><g:form  action="addTopics" class="topicForm">
+                <td ><g:form  controller="subscription" action="changeVisibility" class="topicForm">
+                    <g:field type="hidden" name="id1" value="${it.id}"></g:field>
                     <g:select onChange="submit()" class ="form-control" name="visibility" from="${['PUBLIC','PRIVATE']}"
                               value="${it.visibility}" />
                 </g:form> </td>
                 <td>
 
-                    <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                    <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#trendinvite">
                         <i class="fas fa-envelope">
                         </i>
                     </button>
-                    <div class="modal" id="topicinvite">
+                    <div class="modal" id="trendinvite">
                         <div class="cardbodyinvite">
                             <div class="card-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 <h4 class="modal-title" >Send Invitation</h4>
                             </div>
                             <div class="card-body">
-                                <g:form class="form-horizontal" controller="sendingLink" action="sendInvite" name="invitation">
+                                <g:form class="form-horizontal" controller="sendLink" action="sendInvite" name="invitation">
                                     <div class="form-group">
                                         <div class="col-sm-2 control-label">Email</div>
                                         <div class="col-sm-12">
@@ -542,7 +553,7 @@
                                     <div class="form-group">
                                         <div class="col-sm-2 control-label">Topic</div>
                                         <div class="col-sm-12">
-                                            <input type="text" name="topicName" required placeholder="Topic Name" class="form-control col-sm-12" />
+                                            <g:select name="topicName" from="${trending.topicName}" class="dropdown-toggle btn btn-default col-sm-12" ></g:select>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -584,9 +595,9 @@
                         </g:else>
                     </td>
 
-                    <td width=100px class="txxt"><a href="">${it.subscribers.size()}</a></td>
+                    <td width=100px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.id]">${it.subscribers.size()}</g:link></td>
                     <td></td>
-                    <td width=150px class="txxt"><a href="">${it.resources.size()}</a></td>
+                    <td width=150px class="txxt"><g:link controller="topic" action="viewTopic" params="[id:it.id]">${it.resources.size()}</g:link></td>
                 </tr>
                 <tr>
                     <td ><g:form  action="addTopics" class="topicForm">
@@ -599,18 +610,18 @@
 
                     <td>
 
-                        <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#topicinvite">
+                        <button type="button" class="btn btn-info btn-warning" data-toggle="modal" title="invite" data-target="#trendinvite">
                             <i class="fas fa-envelope">
                             </i>
                         </button>
-                        <div class="modal" id="topicinvit">
+                        <div class="modal" id="trendinvite">
                             <div class="cardbodyinvite">
                                 <div class="card-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title" >Send Invitation</h4>
                                 </div>
                                 <div class="card-body">
-                                    <g:form class="form-horizontal" controller="sendingLink" action="sendInvite" name="invitation">
+                                    <g:form class="form-horizontal" controller="sendLink" action="sendInvite" name="invitation">
                                         <div class="form-group">
                                             <div class="col-sm-2 control-label">Email</div>
                                             <div class="col-sm-12">
@@ -620,7 +631,7 @@
                                         <div class="form-group">
                                             <div class="col-sm-2 control-label">Topic</div>
                                             <div class="col-sm-12">
-                                                <input type="text" name="topicName" required placeholder="Topic Name" class="form-control col-sm-12" />
+                                                <g:select name="topicName" from="${trending.topicName}" class="dropdown-toggle btn btn-default col-sm-12"></g:select>
                                             </div>
                                         </div>
                                         <div class="form-group">

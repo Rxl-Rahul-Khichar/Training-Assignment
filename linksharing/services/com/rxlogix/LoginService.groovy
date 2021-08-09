@@ -7,7 +7,7 @@ class LoginService {
 
     def loginMethod(params, def request) {
     User user= User.findByUserName(params.userName)
-        if(params.password==null || params.userName==null || !user){
+        if(params.password==null || params.userName==null || !user || !user.isActive()){
                 return null
         }
         else if(user.userName==params.userName){

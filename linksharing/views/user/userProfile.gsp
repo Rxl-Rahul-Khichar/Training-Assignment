@@ -22,7 +22,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!--Custom styles-->
-    <asset:stylesheet src= "profileStyle.css"></asset:stylesheet>
+    <asset:stylesheet src= "edtProfileStyle.css"></asset:stylesheet>
 
 </head>
 <body>
@@ -181,7 +181,7 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
+                        <asset:image src="${session.user.photo}" height="25px" width="25px"/>
                     </i>
                     ${session.user.userName}
                 </button>
@@ -214,7 +214,7 @@
                 <table  style="width:100%">
                     <tr>
                         <td rowspan="4" colspan="3" width="10%">
-                            <asset:image src="/profile/${session.user.userName}.jpg" height="120px" width="115px" style="margin-right: 10px"/>
+                            <asset:image src="${session.user.photo}" height="120px" width="115px" style="margin-right: 10px"/>
                         </td>
                         <td width=200px class="text" colspan="3">${session.user.firstName} ${session.user.lastName}</td>
                     </tr>
@@ -296,7 +296,7 @@
                                 <asset:image src="${it.createdBy.photo}" height="120px" width="115px" style="margin-right: 10px"/>
                             </td>
 
-                            <td width=200px class="txt" colspan="3"><a href="">${it.topicName}</a></td>
+                            <td width=200px class="txt" colspan="3"><a href="">${it.topicName} (${it.visibility})</a></td>
                         </tr>
                         <tr>
                             <td width=100px class="text-muted">@${it.createdBy.userName}</td>
@@ -309,9 +309,9 @@
                             <tr>
                                 <td></td>
 
-                                <td width=100px class="txxt"><a href="">50</a></td>
+                                <td width=100px class="txxt"><a href="">${it.subscribers.size()}</a></td>
                                 <td></td>
-                                <td width=150px class="txxt"><a href="">50</a></td>
+                                <td width=150px class="txxt"><a href="">${it.resources.size()}</a></td>
                             </tr>
 
                             <tr>

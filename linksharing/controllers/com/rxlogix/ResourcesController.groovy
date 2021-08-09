@@ -2,6 +2,8 @@ package com.rxlogix
 
 class ResourcesController {
     def resourceService
+    def readingService
+    def topicService
     def index() { }
     def saveDocument() {
             String name = session.user.userName
@@ -37,5 +39,17 @@ class ResourcesController {
             response.outputStream << file.bytes
         }
         else render "Error!"
+    }
+    def markRead(){
+        String name = session.user.userName
+        readingService.markAsReadMethod(params,name)
+        redirect( controller: "dashboard",action: "dashboard")
+    }
+    def viewPost(){
+        Long id = Long.parseLong(params.id)
+        Resource rsc = Resource.get(id)
+        Integer rating = resourceService.sumRating(id)
+        List trending = topicService.trendTopicsMethod()
+        render(view: "showPost",model: [post:rsc,rating:rating,trending:trending])
     }
 }

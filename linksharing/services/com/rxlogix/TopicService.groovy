@@ -23,7 +23,6 @@ class TopicService {
             } catch(Exception e) {
                 return null
             }
-            println topic
             return topic
 
         } catch(Exception e){

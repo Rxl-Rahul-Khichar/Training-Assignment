@@ -193,7 +193,7 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
+                        <asset:image src="${session.user.photo}" height="25px" width="25px"/>
                     </i>
                     ${session.user.userName}
                 </button>

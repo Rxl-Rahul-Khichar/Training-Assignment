@@ -5,7 +5,6 @@ class ReadingItem {
     //user
     boolean isRead
     static belongsTo = [resource:Resource,user:User]
-
     static constraints = {
         isRead blank: false
     }

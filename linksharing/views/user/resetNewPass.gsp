@@ -1,6 +1,14 @@
 <%--
   Created by IntelliJ IDEA.
   User: rxlogix
+  Date: 09/08/21
+  Time: 1:31 PM
+--%>
+
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: rxlogix
   Date: 26/07/21
   Time: 10:34 PM
 --%>
@@ -9,7 +17,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Forgot Password</title>
+    <title>Reset Password</title>
 
     <!--Bootsrap 4 CDN-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -37,32 +45,25 @@
 
 
         <div class="cardforgot">
-            <div class="card-header">
-                <h3>Find Your Account</h3>
-            </div>
             <div class="card-body">
-                <h8 > Type your Registered Email to find your account </h8>
-                <g:form controller="sendLink" action="resetPassword">
+                <g:form controller="user" action="resetPassword" params="[name:name]">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <input type="text" class="form-control"  name="email" required placeholder="Email">
+                        <input type="password" class="form-control" name="newPassword" placeholder="password" required>
                     </div>
-                    <p class="txt" id="ts">${flash.success}</p>
-                    <p class="txt" id="th">${flash.error}</p>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input type="password" class="form-control" name="newConfirmPassword" placeholder="confirm password" required>
+                    </div>
+                    <p class="txt" id="msg">${flash.msg}</p>
                     <div class="form-group">
-                        <input type="submit" value="Get Link" class="btn float-right login_btn">
+                        <input type="submit" value="Save" class="btn float-right login_btn">
                     </div>
-
                 </g:form>
-                <a class="cancel" href="/user/index/">Cancel</a>
-            </div>
-            <div class="card-footer">
-
-                <div class="d-flex justify-content-center links">
-                    Don't have account?<a href="/user/index">Sign Up</a>
-                </div>
             </div>
         </div>
 

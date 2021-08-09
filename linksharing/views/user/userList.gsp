@@ -185,7 +185,7 @@
 
                 <button type="button" class="btn btn-info btn-warning" id="navbarDropdownMenuLink" data-toggle="dropdown" title="Profile" data-target="collapse" aria-expanded="true" aria-haspopup="true">
                     <i class="photo" style="text-align:center;">
-                        <asset:image src="/profile/${session.user.userName}.jpg" height="25px" width="25px"/>
+                        <asset:image src="${session.user.photo}" height="25px" width="25px"/>
                     </i>
                     ${session.user.userName}
                 </button>
@@ -235,6 +235,9 @@
                     </th>
                     <th class="txt">Manage
                     </th>
+                    <th class="txt">
+                        Role
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -245,10 +248,25 @@
                         <td  class="txt">${user.email}</td>
                         <td  class="txt">${user.firstName}</td>
                         <td  class="txt">${user.lastName}</td>
-                        <td  class="txt">active</td>
+                        <td  class="txt">${user.active}</td>
                         <td>
                             <button class="btn btn-warning">
-                                <a>Activate/Deactivate</a>
+                                <g:if test="${user.isActive()}">
+                                    <g:link controller="user" action="deActivateUser" params="${[name: user.userName]}">Deactivate</g:link>
+                                </g:if>
+                                <g:else>
+                                    <g:link controller="user" action="activateUser" params="${[name: user.userName]}">Activate</g:link>
+                                </g:else>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning">
+                                <g:if test="${user.isAdmin()}">
+                                    Admin
+                                </g:if>
+                                <g:else>
+                                    <g:link controller="user" action="makeAdmin" params="${[name: user.userName]}">Make Admin</g:link>
+                                </g:else>
                             </button>
                         </td>
                     </tr>
@@ -260,7 +278,7 @@
                             "aaSorting": [],
                             columnDefs: [{
                                 orderable: false,
-                                targets: 6
+                                targets: 7
                             }]
                         });
                         $('.dataTables_length').addClass('bs-select');

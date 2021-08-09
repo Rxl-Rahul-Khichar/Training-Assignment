@@ -161,19 +161,20 @@ html,body{
     border-radius:5px;
 }
 .cardtop{
-    height: 420px;
+    height: auto;
     position: relative;
     top:500px;
     left:-220px;
     margin-top:10px;
+    margin-bottom: auto;
     width: 600px;
     background-color: #190033 !important;
     border-radius:5px;
 }
 .social_icon span{
     position:relative;
-    left:220px;
     font-size: 30px;
+    left: -10px;
     margin-left: 10px;
     color: #FFC312;
 }
@@ -193,8 +194,6 @@ html,body{
 
 .social_icon{
     position: relative;
-    right: 5px;
-    bottom:10px;
 
 }
 .text{
@@ -214,8 +213,9 @@ html,body{
 }
 .view{
     position:relative;
-    top:-10px;
-    right:-300px;
+}
+img {
+    border:2px solid #e2e2e2;
 }
 .dropdown{
     float:right;
@@ -226,7 +226,6 @@ html,body{
     background-color: #FFC312;
     color:black;
 }
-
 .input-group-prepend span{
     width: 50px;
     background-color: #FFC312;

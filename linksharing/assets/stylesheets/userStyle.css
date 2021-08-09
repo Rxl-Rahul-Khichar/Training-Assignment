@@ -201,6 +201,9 @@ html,body{
 .cardtopic .card-header{
     height:40px;
 }
+img {
+    border:2px solid #e2e2e2;
+}
 .cancel{
     background-color: #FFC312;
     color: Black;

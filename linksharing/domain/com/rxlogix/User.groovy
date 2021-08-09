@@ -9,6 +9,7 @@ class User {
     String lastName
     String photo
     boolean admin
+    boolean active
     Date dateCreated
     Date lastUpdated
     static transients = ['name']

@@ -35,7 +35,7 @@ class TopicController {
             render(view: 'topicList', model: [topicList: list])
     }
     def viewTopic(){
-        User user = User.findByEmail(session.user.userName)
+        //User user = User.findByUserName(session.user.userName)
         Long tid
         Long id = Long.parseLong(params.id)
         Subscription sub = Subscription.get(id)
@@ -48,11 +48,11 @@ class TopicController {
         Topic topic = Topic.findById(tid)
         Integer subsCount = topic.subscribers.size()
         Integer postCount = topic.resources.size()
-        List topicSubList = subscriptionService.subscriptions(session.user.userName)
-        List subList = subscriptionService.topicSubscriptions(tid)
+        //List topicSubList = subscriptionService.subscriptions(session.user.userName)
+        List subList = resourceService.subscribersList(tid)
         List resourceList = resourceService.resourceListMethod(tid)
         render(view: "showTopic",
-                model: [user: user,topic:topic, subs: sub, subscount: subsCount, postcount: postCount, subscription: topicSubList, subscriber:subList, resources: resourceList])
+                model: [topic:topic, subs: sub, subscount: subsCount, postcount: postCount,subscriber:subList, resources: resourceList])
     }
 
 }

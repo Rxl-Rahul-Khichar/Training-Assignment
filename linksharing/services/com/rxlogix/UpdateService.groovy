@@ -17,7 +17,6 @@ class UpdateService {
             // println(photo2.path)
             user.photo="/profile/${user.userName}.jpg"
             //println u1.photo
-
         }
         try{
             user.save(flush:true,failOnError:true)
