@@ -1,0 +1,6 @@
+#Thu, 29 Jul 2021 10:03:38 +0530
+
+info.app.version=0.1
+info.app.name=demo
+grails.env=development
+info.app.grailsVersion=3.3.9
